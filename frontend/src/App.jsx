@@ -1,44 +1,36 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import axios from 'axios'
+
+import Navbar from './components/navbar'
+import ChatWindow from './components/chat-window'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [audioFile, setAudioFile] = useState(null)
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/data')
-      console.log(response.data)
+      const response = await axios.get('http://localhost:5000/api/speech-to-text')
+      console.log(response.data.text)
+      setData(response.data.text)
+      setLoading(false)
+
     } catch (error) {
       console.error('Error fetching data:', error)
     }
   }
 
   return (
-    <>
-      <div className='flex justify-center items-center'>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='flex flex-col gap-[5vh] h-screen'>
+
+      <Navbar/>
+
+      <ChatWindow/>
+
+    </div>
   )
 }
 
